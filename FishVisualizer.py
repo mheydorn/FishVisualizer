@@ -74,12 +74,6 @@ def read_and_sort_csv(filename):
                     except:
                         time = datetime.datetime.strptime(entry[date_col], time_format)
                     species = entry[8]
-                    #if i == 0:
-                    #    firstTime = time
-                    #    time = 0
-                    #else:
-                    #    time = (time - firstTime).total_seconds()
-
                     if tag + " (" + ntpath.basename(filename) + ")" not in fish_pos:
                         fish_pos[tag + " (" + ntpath.basename(filename) + ")"] = [[east, north, species, time]]
                     else:
@@ -91,8 +85,6 @@ def read_and_sort_csv(filename):
         return fish_pos
     except:
         return None
-
-
 
 def corner_cut(points, iterations): 
     points = np.array(points)[:, 0:2].astype(float)
@@ -137,7 +129,6 @@ def calc_next_kalman(x, P, measurement):
 
     return x, P
 
-
 def kalman_filter(points):
     print "Running Kalman Filter"
     points = np.array(points)[:, 0:2].astype(float)
@@ -149,17 +140,6 @@ def kalman_filter(points):
         result.append((x[:2]).tolist())
     print "Done"
     return np.squeeze(np.array(result).astype(int))
-
-
-
-points = []
-x = 200
-y = 200
-for i in range(1000):
-    x += random.randint(-1,5)
-    y += random.randint(-1,5)
-    points.append([random.randint(0,400), random.randint(0,400)])
-
 
 class LoadingScreen(Tkinter.Toplevel):
     def __init__(self, parent, message):
@@ -184,7 +164,6 @@ class LoadingScreen(Tkinter.Toplevel):
         self.wheelState.set(self.sequence[self.sequenceIndex])
         self.after(1, self.updateWheel)
 
-
 class ShowTextScreen(Tkinter.Toplevel):
     def __init__(self, parent, text):
         Tkinter.Toplevel.__init__(self, parent)
@@ -198,8 +177,7 @@ class ShowTextScreen(Tkinter.Toplevel):
         self.geometry("650x350+%d+%d" % (x + int(width/2) - 550/2, y + int(height/2) - 150/2))
         self.lift()
         self.title("Help")
-
-
+        
         # create a Frame for the Text and Scrollbar
         txt_frm = Tkinter.Frame(self, width=650, height=300)
         txt_frm.pack(fill="both", expand=True)
@@ -228,8 +206,6 @@ class ShowTextScreen(Tkinter.Toplevel):
     def closePress(self):
         self.destroy()
 
-
-
 class HelpScreen(Tkinter.Toplevel):
     def __init__(self, parent):
         Tkinter.Toplevel.__init__(self, parent)
@@ -242,7 +218,6 @@ class HelpScreen(Tkinter.Toplevel):
         self.geometry("650x350+%d+%d" % (x + int(width/2) - 550/2, y + int(height/2) - 150/2))
         self.lift()
         self.title("Instructions")
-
 
         # create a Frame for the Text and Scrollbar
         txt_frm = Tkinter.Frame(self, width=650, height=300)
@@ -271,7 +246,6 @@ class HelpScreen(Tkinter.Toplevel):
 
     def closePress(self):
         self.destroy()
-
 
 class AboutScreen(Tkinter.Toplevel):
     def __init__(self, parent):
@@ -307,13 +281,11 @@ class AboutScreen(Tkinter.Toplevel):
         scrollb = Tkinter.Scrollbar(txt_frm, command=self.txt.yview)
         scrollb.grid(row=0, column=1, sticky='nsew')
         self.txt['yscrollcommand'] = scrollb.set
-
         
         Tkinter.Button(self, text = "close", font=("Helvetica Neue Bold", 12), command = self.closePress).pack(padx=5, pady=5, side=Tkinter.TOP)
 
     def closePress(self):
         self.destroy()
-
 
 class RecordingScreen(Tkinter.Toplevel):
     def __init__(self, parent, mainClass):
@@ -344,7 +316,6 @@ class RecordingScreen(Tkinter.Toplevel):
         Tkinter.Entry(Frame1, width = 20, textvariable = self.tagNameVar).pack(padx=5,side=Tkinter.RIGHT)
         Frame1.pack(padx=10, pady=0, side=Tkinter.TOP)
 
-
         miniFrame = Tkinter.Frame(self)
         Tkinter.Button(miniFrame, text = "Start", font=("Helvetica Neue Bold", 12), command = self.startPress).pack(padx=5, pady=5, side=Tkinter.LEFT)
         Tkinter.Button(miniFrame, text = "Cancel", font=("Helvetica Neue Bold", 12), command = self.cancel).pack(padx=5, pady=5, side=Tkinter.LEFT)
@@ -359,7 +330,6 @@ class RecordingScreen(Tkinter.Toplevel):
     def cancel(self):
         self.mainClass.recording = False
         self.destroy()
-
 
 class AskOpenNow(Tkinter.Toplevel):
     def __init__(self, parent, mainClass):
@@ -388,7 +358,6 @@ class AskOpenNow(Tkinter.Toplevel):
     def no(self):
         self.mainClass.saveNow = False
         self.destroy()
-
 
 class PrompJitterScreen(Tkinter.Toplevel):
     def __init__(self, parent, mainClass):
@@ -429,11 +398,9 @@ class PrompJitterScreen(Tkinter.Toplevel):
     def showHelp(self):
         showTextScreen = ShowTextScreen(self.mainClass.root, "This is the help page")
         showTextScreen.grab_set()
-        
-
 
 class App:
-
+    
     def hello(self):
         print "hello!"
 
@@ -475,9 +442,7 @@ class App:
         self.maxNumFish = 9
         self.root.configure(bg=bgColor)
 
-
         #File Menu
-
         menubar = Tkinter.Menu(self.root)
 
         # create a pulldown menu, and add it to the menu bar
@@ -499,7 +464,6 @@ class App:
         #self.recordMenu.entryconfig("Add Jitter Noise", state="disabled")
         menubar.add_cascade(label="Record", menu=self.recordMenu)
 
-
         helpmenu = Tkinter.Menu(menubar, tearoff=0)
         helpmenu.add_command(label="Instructions", command=self.showHelpMenu)
         helpmenu.add_command(label="About", command=self.showAboutMenu)
@@ -507,7 +471,6 @@ class App:
 
         # display the menu
         self.root.config(menu=menubar)
-
 
         ############# Right Column ####################
         self.FrameRight = Tkinter.Frame(self.root, borderwidth = 1, bg=bgColor)
@@ -532,7 +495,6 @@ class App:
 
         self.FrameRight.grid(row = 0, column = 2, columnspan = 1, rowspan = 100, padx = 5, stick = "new")
 
-        
         ###################  Center Column Start ##########################
         self.FrameCenter = Tkinter.Frame(self.root, borderwidth = 1, bg=bgColor)
         pady = 5
@@ -570,22 +532,19 @@ class App:
         miniFrame.pack(padx=5, pady=pady, side=Tkinter.TOP)
         Frame1.pack(padx=5, pady=pady, side=Tkinter.TOP)
 
-
         self.FrameCenter.grid(row = 0, column = 1, columnspan = 1, rowspan = 100, padx = 5, stick = "new")
-
+        
         ###################  Left Column Start ##########################
         self.FrameLeft = Tkinter.Frame(self.root, borderwidth = 1, bg=bgColor)
 
         Tkinter.Label(self.FrameLeft, text = "", font=("Helvetica Neue Bold", 12), bg = bgColor).pack(padx=5, pady=5, side=Tkinter.TOP)
         #Frame2 = Tkinter.Frame(self.FrameLeft, borderwidth = 0, bg = "gray")
 
-
         #Load Fish file menu
-
+        
         self.fishDataFilename = Tkinter.StringVar(self.root)
         self.fishDataFilenameDisplay = Tkinter.StringVar(self.root)
         self.fishDataFilenameDisplay.set("Click Here to Load a Data File")
-
 
         #Buttons
         Frame1 = Tkinter.Frame(self.FrameLeft,  bg = bgColor,highlightbackground="gray", highlightcolor="gray", highlightthickness = 7)
@@ -597,7 +556,6 @@ class App:
         miniFrame.pack(padx=5, pady=pady, side=Tkinter.TOP)
         Frame1.pack(padx=5, pady=pady, side=Tkinter.TOP)
 
-
         miniFrame = Tkinter.Frame(Frame1, bg=bgColor)
         Tkinter.Label(miniFrame, text = "PlayBack Speed:", font=("Helvetica Neue Bold", 10), bg = bgColor).pack(padx=5, pady=5, side=Tkinter.LEFT)
         self.timeMultiplierVar = Tkinter.StringVar(self.root)
@@ -606,7 +564,6 @@ class App:
         Tkinter.Label(miniFrame, text = "x Real Speed", font=("Helvetica Neue Bold", 10), bg = bgColor).pack(padx=5, pady=5, side=Tkinter.LEFT)
         miniFrame.pack(fill = Tkinter.X)
 
-        
         #Skip To time box
         Frame1 = Tkinter.Frame(self.FrameLeft, bg = bgColor, highlightbackground="gray", highlightcolor="gray", highlightthickness = 7)
         Tkinter.Label(Frame1, text = "Go to Time", font=("Helvetica Neue Bold", 12), bg = bgColor).pack(pady=0, fill = Tkinter.X)
@@ -654,11 +611,9 @@ class App:
 
         Tkinter.Button(miniFrame, text = "Reset", font=("Helvetica Neue Bold", 10), bg = bgColor, command = self.resetTime).pack(padx=5, pady=5, side=Tkinter.TOP)
 
-
         miniFrame.pack(pady=0, fill = Tkinter.X)
         miniFrame2.pack(pady=5, fill = Tkinter.X)
         Frame1.pack(padx=5, pady=pady, side=Tkinter.TOP)
-
 
         #Frame2.pack(padx=5, pady=pady, side=Tkinter.TOP)
         self.FrameLeft.grid(row = 0, column = 0, columnspan = 1, rowspan = 100, padx = 5, stick = "new")
@@ -690,14 +645,11 @@ class App:
         numFish =  int(self.numFishToShow.get())
         col = 0
         for fishIndex in range(self.maxNumFish):
-
             if fishIndex < numFish:
                 if fishIndex % 3 == 0 and fishIndex > 0:
                     col += 1    
                 self.FishFrames[fishIndex].grid(row = fishIndex % 3, column = col, columnspan = 1, rowspan = 1, padx = 5, pady = 5, stick = "new")
-
             else:
-
                 self.FishFrames[fishIndex].grid_forget()
         if self.loaded:
             self.drawAll()
@@ -790,14 +742,12 @@ class App:
         self.drawAll()
         self.updateSetTime(force = True)
 
-
     def Exit(self):
         self.root.destroy()
 
     def Restart(self):
         print "Reset"
         self.plotArea.delete("all")
-
 
         if self.imgPhoto is not None:
             self.backgroundImage = self.plotArea.create_image(self.width/2,self.height/2, image=self.imgPhoto)
@@ -873,7 +823,6 @@ class App:
         if self.loaded:
             self.drawAll()
 
-
     def filterPoint(self, index, fishIndex):
         if self.recording:
             return self.recordedPoints[index]
@@ -891,8 +840,6 @@ class App:
             return np.array([x, y])
         else:
             return np.array(points[index][0:2]).astype(float)
-
-
 
     def drawAll(self):
         if not self.fileLoaded and not self.recording:
@@ -913,7 +860,6 @@ class App:
                 secondPoint = self.filterPoint(behind + 1, 0)
                 self.plotArea.create_line(firstPoint[0], firstPoint[1],secondPoint[0],secondPoint[1], fill=colorHex, width = 2)
             return
-
 
         if len(self.allTimes) < 1:
             return
@@ -974,8 +920,6 @@ class App:
                 #print "plotting at", firstPoint[0], firstPoint[1]
 
                 self.plotArea.create_line(firstPoint[0], firstPoint[1],secondPoint[0],secondPoint[1], fill=colorHex, width = 2)
-
-
 
     def updateSetTime(self, force = False):
         if self.playing or self.reversing or force:
@@ -1093,8 +1037,6 @@ class App:
         loadingScreen.destroy()
         self.filemenu.entryconfig("Save State", state="normal")
 
-        
-
     def autoPlot(self):
         if self.recording:
             self.root.after(50, self.autoPlot)
@@ -1104,7 +1046,6 @@ class App:
         except ValueError:
             print "AutoStep adjusted" 
 
-        
         self.root.after(50, self.autoPlot)
         try:
             multiplier = float(self.timeMultiplierVar.get())
@@ -1114,7 +1055,6 @@ class App:
             self.currentTime =  self.currentTime + datetime.timedelta(milliseconds=int(50 * multiplier))
         elif self.reversing:
             self.currentTime =  self.currentTime - datetime.timedelta(milliseconds=int(50 * multiplier))
-
 
         if self.currentTime > self.endTime:
             self.currentTime = self.endTime
@@ -1203,10 +1143,7 @@ class App:
         self.filemenu.entryconfig("Save State", state="disabled")
         self.filemenu.entryconfig("Restore State", state="disabled")
         #self.recordMenu.entryconfig("Add Jitter Noise", state="normal")
-
-
-
-
+        
         recordingScreen = RecordingScreen(self.root, self)
         recordingScreen.grab_set()
         self.root.wait_window(recordingScreen)
@@ -1214,8 +1151,6 @@ class App:
         if self.recording == False:
             self.finishRecording(cancel = True)
         self.recordTimer()
-
-
 
     def finishRecording(self, cancel = False):
         self.setColumState("normal")
@@ -1254,11 +1189,9 @@ class App:
                 self.filemenu.entryconfig("Save State", state="disabled")
         self.drawAll()
 
-
     def recordTimer(self):
 
         if self.recording:
-
             if self.mousex is None or not self.mouseDown:
                 self.root.after(20, self.recordTimer)
                 return
@@ -1269,13 +1202,11 @@ class App:
             self.recordIndex = self.recordIndex + 1
             self.root.after(20, self.recordTimer)
             
-
     def motion(self, event):
         #print event.state
         if self.recording:
             self.mousex = event.x
             self.mousey = event.y
-        #print('{}, {}'.format(event.x, event.y))
 
     def showHelpMenu(self):
         helpScreen = HelpScreen(self.root)
@@ -1300,7 +1231,6 @@ class App:
         self.drawAll()
 
     def saveState(self):
-
         saveFile = tkFileDialog.asksaveasfile(mode='w', defaultextension=".fvs")
 
         if saveFile is None:
@@ -1422,7 +1352,6 @@ class App:
         for fishIndex in range(self.maxNumFish):
             self.stepsToKeep[fishIndex].set(saveDict['stepsToKeep'][fishIndex])
 
-
         self.killUpdates = False
         self.updateNumFish(force = True)
         self.fishChanged()
@@ -1434,8 +1363,6 @@ class App:
         loadingScreen.destroy()
         self.restoring = False
         self.filemenu.entryconfig("Save State", state="normal")
-        
-
 
     def mouseClick(self, event):
         self.mouseDown = True
@@ -1445,8 +1372,7 @@ class App:
 
     def on_closing(self):
         self.root.destroy()
-
-    	
+	
 # Calling the class will execute our GUI.
 App(points)
 os._exit(0)
