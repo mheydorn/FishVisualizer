@@ -404,7 +404,7 @@ class App:
     def hello(self):
         print "hello!"
 
-    def __init__(self, points):
+    def __init__(self):
         self.killUpdates = False
         self.restoring = False
         self.recordTagName = "1111.1111"
@@ -1374,6 +1374,6 @@ class App:
         self.root.destroy()
 	
 # Calling the class will execute our GUI.
-App(points)
+App()
 os._exit(0)
 
